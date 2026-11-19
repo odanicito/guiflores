@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>flores pra o GuiGui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--u:min(1vw,.9vh);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html,body{height:100%;margin:0}
+body{position:relative;overflow:hidden;background:linear-gradient(#080b24 0%,#2a1b4d 55%,#6a3a6e 100%);font-family:'Caveat','Segoe Script',cursive}
+h1{position:absolute;z-index:50;top:6vh;left:0;right:0;margin:0;padding:0 4vw;text-align:center;font-weight:600;font-size:clamp(2.8rem,11vw,6rem);line-height:1.1;color:#fff4e0;text-shadow:0 0 18px rgba(255,190,120,.55),0 0 42px rgba(255,120,170,.35);opacity:0;animation:fade 3s ease-out .4s forwards}
+@keyframes fade{to{opacity:1}}
+.star{position:absolute;border-radius:50%;background:#fff;animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.15}to{opacity:.9}}
+.moon{position:absolute;top:5vh;right:7vw;width:9vmin;height:9vmin;border-radius:50%;background:#fff4d6;box-shadow:0 0 30px 10px rgba(255,240,200,.35)}
+.ff{position:absolute;width:5px;height:5px;border-radius:50%;background:#ffe9a0;box-shadow:0 0 10px 4px rgba(255,225,130,.7);opacity:0;animation:fl 9s ease-in-out infinite alternate}
+@keyframes fl{0%{transform:translate(0,0);opacity:0}25%{opacity:1}100%{transform:translate(var(--dx),var(--dy));opacity:.8}}
+.ground{position:absolute;left:0;right:0;bottom:0;height:9vh;background:linear-gradient(transparent,#0a1a16 55%)}
+#garden{position:absolute;inset:0}
+.f{position:absolute;bottom:3vh;left:var(--x);width:calc(var(--w)*var(--u));margin-left:calc(var(--w)*var(--u)/-2);aspect-ratio:120/260}
+.f svg{width:100%;height:100%;overflow:visible;transform-origin:50% 100%;animation:sway 4.5s ease-in-out calc(var(--d)*1s + 3.4s) infinite alternate both}
+@keyframes sway{from{transform:rotate(-1.8deg)}to{transform:rotate(1.8deg)}}
+.stem{fill:none;stroke:#3f9d52;stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:grow 2.2s ease-out calc(var(--d)*1s) forwards}
+@keyframes grow{to{stroke-dashoffset:0}}
+.leaf{fill:#3f9d52;transform:scale(0);animation:pop 1s cubic-bezier(.3,1.5,.5,1) calc(var(--d)*1s + 1.2s) forwards}
+@keyframes pop{to{transform:scale(1)}}
+.head{transform-origin:60px 56px;transform:scale(0) rotate(-40deg);animation:bloom 1.6s cubic-bezier(.2,1.4,.4,1) calc(var(--d)*1s + 1.8s) forwards}
+@keyframes bloom{to{transform:scale(1) rotate(0)}}
+@media (prefers-reduced-motion:reduce){
+ .star,.ff,.f svg{animation:none!important}
+ .stem,.leaf,.head,h1{animation-delay:0s!important;animation-duration:.01s!important}
+}
+</style>
+</head>
+<body>
+<div id="sky"></div>
+<div class="moon"></div>
+<h1>flores pra o GuiGui</h1>
+<div id="garden"></div>
+<div class="ground"></div>
+<script>
+const ring=(n,f)=>Array.from({length:n},(_,i)=>f(i*360/n,i)).join('');
+let uid=0;
+const heads={
+ sun(){
+  let s=ring(18,a=>`<ellipse cx="60" cy="26" rx="8" ry="19" fill="#f5a300" transform="rotate(${a} 60 56)"/>`)
+   +ring(18,a=>`<ellipse cx="60" cy="29" rx="7.5" ry="16" fill="#ffd21f" transform="rotate(${a+10} 60 56)"/>`)
+   +'<circle cx="60" cy="56" r="20" fill="#4a2a0f"/>';
+  for(let n=1;n<46;n++){const r=2.6*Math.sqrt(n),t=n*2.399;
+   s+=`<circle cx="${(60+r*Math.cos(t)).toFixed(1)}" cy="${(56+r*Math.sin(t)).toFixed(1)}" r="1.4" fill="#9a6a2a"/>`}
+  return s},
+ dai(){
+  return ring(12,a=>`<ellipse cx="60" cy="34" rx="6.5" ry="17" fill="#fff" stroke="#e8d9f0" stroke-width=".8" transform="rotate(${a} 60 56)"/>`)
+   +ring(12,a=>`<ellipse cx="60" cy="38" rx="5.5" ry="13" fill="#fffaf2" transform="rotate(${a+15} 60 56)"/>`)
+   +'<circle cx="60" cy="56" r="10" fill="#ffc928" stroke="#e69b00" stroke-width="1.5"/>'},
+ ros(c){
+  const id='g'+(uid++);
+  return `<defs><radialGradient id="${id}" gradientUnits="userSpaceOnUse" cx="60" cy="56" r="44"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="${c[0]}"/><stop offset="1" stop-color="${c[1]}"/></radialGradient></defs>`
+   +ring(5,a=>`<ellipse cx="60" cy="35" rx="18" ry="24" fill="url(#${id})" stroke="${c[1]}" stroke-width="1" transform="rotate(${a} 60 56)"/>`)
+   +ring(5,a=>`<path d="M60 56V22" stroke="#fff" stroke-opacity=".35" stroke-width="1.2" transform="rotate(${a} 60 56)"/>`)
+   +'<circle cx="60" cy="56" r="6" fill="#fff6d0"/>'},
+ tul(c){
+  return `<path d="M60 92C36 90 34 52 40 24C54 38 62 58 60 92Z" fill="${c[1]}"/>`
+   +`<path d="M60 92C84 90 86 52 80 24C66 38 58 58 60 92Z" fill="${c[1]}"/>`
+   +`<path d="M60 94C44 86 44 50 60 20C76 50 76 86 60 94Z" fill="${c[0]}"/>`
+   +`<path d="M56 80C50 66 52 48 58 34" stroke="${c[2]}" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/>`}
+};
+const rosa=[['#ff7aa8','#d6336c'],['#ff6b6b','#b3122e'],['#ff7ad9','#b5179e']];
+const tul=[['#e63946','#a4161a','#ff8fa3'],['#9b5de5','#6a2fb0','#d0a9ff'],['#ff8c42','#d9480f','#ffc08a']];
+const cfg=[
+ {x:6,w:34,t:'sun',d:2.3},{x:15,w:24,t:'tul',c:tul[0],d:0.5},{x:24,w:30,t:'dai',d:3.2},
+ {x:33,w:22,t:'ros',c:rosa[0],d:1.4},{x:42,w:32,t:'sun',d:0.9},{x:51,w:26,t:'dai',d:4.1},
+ {x:60,w:34,t:'ros',c:rosa[1],d:2.8},{x:69,w:23,t:'tul',c:tul[1],d:0.2},{x:78,w:30,t:'sun',d:3.6},
+ {x:86,w:25,t:'dai',d:1.9},{x:94,w:33,t:'tul',c:tul[2],d:4.6},{x:50,w:20,t:'ros',c:rosa[2],d:5.2}
+];
+const G=document.getElementById('garden');
+cfg.forEach((f,i)=>{
+ const top=f.t==='tul'?90:56,k=[10,-10,7,-7][i%4];
+ const el=document.createElement('div');el.className='f';
+ el.style.cssText=`--x:${f.x}%;--w:${f.w};--d:${f.d};z-index:${40-f.w}`;
+ el.innerHTML=`<svg viewBox="0 0 120 260" aria-hidden="true"><path class="stem" pathLength="1" d="M60 260C${60+k} 200 ${60-k} ${top+70} 60 ${top}"/><path class="leaf" style="transform-origin:60px 190px" d="M60 190C38 186 24 170 14 150C38 150 56 164 60 190Z"/><path class="leaf" style="transform-origin:60px 215px" d="M60 215C82 211 96 195 106 175C82 175 64 189 60 215Z"/><g class="head">${heads[f.t](f.c)}</g></svg>`;
+ G.appendChild(el);
+});
+const sky=document.getElementById('sky');
+for(let i=0;i<70;i++){
+ const s=document.createElement('div'),z=1+Math.random()*1.6;
+ s.className='star';
+ s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*60}%;width:${z}px;height:${z}px;animation-delay:${Math.random()*3}s`;
+ sky.appendChild(s);
+}
+for(let i=0;i<16;i++){
+ const s=document.createElement('div');
+ s.className='ff';
+ s.style.cssText=`left:${Math.random()*100}%;top:${40+Math.random()*50}%;--dx:${(Math.random()-.5)*120}px;--dy:${-20-Math.random()*90}px;animation-delay:${Math.random()*9}s;animation-duration:${7+Math.random()*6}s`;
+ sky.appendChild(s);
+}
+</script>
+</body>
+</html>
